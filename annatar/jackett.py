@@ -25,8 +25,8 @@ from annatar.torrent import Torrent
 log = structlog.get_logger(__name__)
 
 
-JACKETT_URL: str = os.environ.get("JACKETT_URL", "http://45.154.87.104:9117")
-JACKETT_API_KEY: str = os.environ.get("JACKETT_API_KEY", "6ebybwn3luj2nwyx4063naqjx82hvwuj")
+JACKETT_URL: str = os.environ.get("JACKETT_URL", "http://157.97.88.29:9117")
+JACKETT_API_KEY: str = os.environ.get("JACKETT_API_KEY", "xhsfzj61y4r5m6k78jmumk0veumwnqg1")
 
 JACKETT_MAX_RESULTS = int(os.environ.get("JACKETT_MAX_RESULTS", 10))
 JACKETT_TIMEOUT = int(os.environ.get("JACKETT_TIMEOUT", 6))
@@ -35,7 +35,7 @@ JACKETT_CACHE_MINUTES = timedelta(minutes=int(os.environ.get("JACKETT_CACHE_MINU
 
 JACKETT_INDEXERS_LIST: list[str] = os.environ.get(
     "JACKETT_INDEXERS",
-    "backups,bitsearch,btsow,idope,leech24,movieworld,rapidzona,seedoff,showrss,sktorrent-org,solidtorrents,therarbg,torlock,torrentdownloads,torrentleech,torrentseeds-api,torrentz2nz,yourbittorrent,limetorrents,badasstorrents",
+    "1337x,bitsearch,cinecalidad,divxtotal,dmhy,dontorrent,eztv,gamestorrents,knaben,limetorrents,mejortorrent,moviesdvdr,puntotorrent,solidtorrents,therarbg,torlock,torrentdownloads,torrent9,torrentfunk,torrentz2nz,unionfansub,wolfmax4k,yourbittorrent",
 ).split(",")
 
 
