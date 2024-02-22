@@ -70,7 +70,7 @@ async def _get_media_info(id: str, type: str) -> MediaInfo | None:
         HTTP_CLIENT_REQUEST_DURATION.labels(
             client="cinemeta",
             method="GET",
-            url="/meta/{type}/{id}.json",
+            url=f"/meta/{type}/{id}.json",
             status_code=status,
             error=error,
         ).observe(amount=(datetime.now() - start_time).total_seconds())
@@ -87,9 +87,9 @@ async def get_media_info(id: str, type: str) -> Optional[MediaInfo]:
     if res is None:
         return None
 
-    await db.set(
-        cache_key,
-        res.model_dump_json(),
+    await db.set_model(
+        key=cache_key,
+        model=res,
         ttl=timedelta(days=30),
     )
     return res
