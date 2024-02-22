@@ -15,11 +15,11 @@ services:
       - "redis_data:/app/data"
     environment:
       LOG_LEVEL: debug
-      JACKETT_URL: "http://jackett:9117"
-      JACKETT_API_KEY: "<Set this value from Jackett>"
+      JACKETT_URL: "http://45.154.87.104:9117"
+      JACKETT_API_KEY: "6ebybwn3luj2nwyx4063naqjx82hvwuj"
       JACKETT_MAX_RESULTS: "10" # max results from jackett search
       JACKETT_TIMEOUT: "5" # max time spent searching per indexer.
-      JACKETT_INDEXERS: "yts,eztv,kickasstorrents-ws,thepiratebay,therarbg,torrentgalaxy,bitsearch,limetorrents,badasstorrents"
+      JACKETT_INDEXERS: "backups,bitsearch,btsow,cheggit,idope,leech24,movieworld,rapidzona,seedoff,showrss,sktorrent-org,solidtorrents,therarbg,torlock,torrentdownloads,torrentleech,torrentseeds-api,torrentz2nz,yourbittorrent"
       LISTEN_PORT: "8000"
 
   jackett:

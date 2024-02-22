@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from pydantic import BaseModel
 
@@ -85,7 +85,7 @@ class SearchResult(BaseModel):
     InfoHash: Optional[str] = None
     MagnetUri: Optional[str] = None
     MinimumRatio: Optional[float] = None
-    MinimumSeedTime: Optional[str] = None
+    MinimumSeedTime: Optional[Union[str, int]] = None
     DownloadVolumeFactor: Optional[float] = None
     UploadVolumeFactor: Optional[float] = None
     Gain: Optional[float] = None
