@@ -3,7 +3,7 @@ import os
 import sys
 from collections import defaultdict
 from datetime import timedelta
-from typing import AsyncGenerator, Callable, Coroutine, Optional, Tuple, Type, TypeVar
+from typing import Callable, Coroutine, Optional, Type, TypeVar
 
 import structlog
 from prometheus_client import Counter, Histogram
@@ -13,7 +13,6 @@ from redislite.client import StrictRedis
 from annatar import instrumentation
 
 log = structlog.get_logger(__name__)
-
 
 DB_PATH = os.environ.get("DB_PATH", "annatar.db")
 REDIS_URL = os.environ.get("REDIS_URL", "")
@@ -238,8 +237,36 @@ async def _get(key: str, force: bool = False) -> Optional[str]:
         return None
 
 
-if REDIS_URL:
-    log.info("connected to redis", host=REDIS_URL)
-    asyncio.create_task(ping())
-else:
-    log.info("running with local redis", storage=DB_PATH)
+async def shutdown_redis():
+    try:
+        redis.shutdown()
+        log.info("Redis shutdown successful")
+    except Exception as e:
+        log.error("Redis shutdown failed", exc_info=e)
+
+
+async def close_redis():
+    try:
+        redis.close()
+        await redis.wait_closed()
+        log.info("Redis connection closed")
+    except Exception as e:
+        log.error("Failed to close Redis connection", exc_info=e)
+
+
+async def on_startup():
+    if REDIS_URL:
+        log.info("Connected to redis", host=REDIS_URL)
+        asyncio.create_task(ping())
+    else:
+        log.info("Running with local redis", storage=DB_PATH)
+
+
+async def on_shutdown():
+    await close_redis()
+
+
+# Additional setup for application startup and shutdown
+app.on_startup.append(on_startup)
+app.on_shutdown.append(shutdown_redis)
+app.on_shutdown.append(close_redis)
