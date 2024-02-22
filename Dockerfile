@@ -1,4 +1,5 @@
 ARG BUILD_VERSION=UNKNOWN
+
 # --- Build Stage ---
 FROM python:3.11 as builder
 
@@ -12,6 +13,9 @@ RUN pip install "poetry==$POETRY_VERSION"
 
 # Set the working directory in the builder stage
 WORKDIR /app
+
+# Create the '/app/data' directory in the build stage
+RUN mkdir -p /app/data
 
 # Copy the pyproject.toml and poetry.lock files
 COPY pyproject.toml poetry.lock* /app/
@@ -31,25 +35,26 @@ RUN poetry build
 # --- Final Stage ---
 FROM python:3.11-slim as final
 
-ENV BUILD_VERSION=${BUILD_VERSION}
-
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV DB_PATH=/app/data/annatar.db
-ENV NUM_WORKERS 4
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    DB_PATH=/app/data/annatar.db \
+    NUM_WORKERS=4
 
 VOLUME /app/data
 WORKDIR /app
+
+# Create the '/app/data' directory in the final stage
+RUN mkdir -p /app/data
 
 # Copy wheels and built wheel from the builder stage
 COPY --from=builder /app/dist/*.whl /tmp/wheels/
 COPY --from=builder /tmp/wheels/*.whl /tmp/wheels/
 
-# # Install the application package along with all dependencies
+# Install the application package along with all dependencies
 RUN pip install /tmp/wheels/*.whl && rm -rf /tmp/wheels
 
-# # Copy static and template files
+# Copy static and template files
 COPY ./static /app/static
 COPY ./templates /app/templates
 
