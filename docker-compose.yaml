@@ -19,7 +19,7 @@ services:
       JACKETT_API_KEY: "xhsfzj61y4r5m6k78jmumk0veumwnqg1"
       JACKETT_MAX_RESULTS: "10" # max results from jackett search
       JACKETT_TIMEOUT: "5" # max time spent searching per indexer.
-      JACKETT_INDEXERS: "1337x,bitsearch,cinecalidad,divxtotal,dmhy,dontorrent,eztv,gamestorrents,knaben,limetorrents,mejortorrent,moviesdvdr,puntotorrent,solidtorrents,therarbg,torlock,torrentdownloads,torrent9,torrentfunk,torrentz2nz,unionfansub,wolfmax4k,yourbittorrent"
+      JACKETT_INDEXERS: "1337x,bitsearch,Cinecalidad,DivxTotal,dmhy,DonTorrent,eztv,gamestorrents,knaben,limetorrents,MejorTorrent,moviesdvdr,puntotorrent,solidtorrents,therarbg,torlock,torrentdownloads,torrent9,torrentfunk,torrentz2nz,unionfansub,wolfmax4k,yourbittorrent"
       LISTEN_PORT: "8000"
 
   jackett:
