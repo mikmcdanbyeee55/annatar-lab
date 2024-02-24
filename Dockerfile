@@ -28,17 +28,12 @@ ENV NUM_WORKERS 4
 VOLUME /app/data
 WORKDIR /app
 
-# Install Node.js and npm
-RUN apt-get update \
-    && apt-get install -y nodejs npm procps \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install PM2
-RUN npm install pm2 -g
-
 # Copy static and template files
 COPY ./static /app/static
 COPY ./templates /app/templates
+
+# Install PM2
+RUN npm install pm2 -g
 
 # Use PM2 to start your application
 CMD ["pm2-runtime", "--interpreter", "python", "run.py"]
