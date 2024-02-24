@@ -1,4 +1,3 @@
-ARG BUILD_VERSION=UNKNOWN
 # --- Build Stage ---
 FROM python:3.11 as builder
 
@@ -31,7 +30,7 @@ RUN poetry build
 # --- Final Stage ---
 FROM python:3.11-slim as final
 
-ENV BUILD_VERSION=${BUILD_VERSION}
+ENV BUILD_VERSION=UNKNOWN
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -46,13 +45,17 @@ WORKDIR /app
 COPY --from=builder /app/dist/*.whl /tmp/wheels/
 COPY --from=builder /tmp/wheels/*.whl /tmp/wheels/
 
-# # Install the application package along with all dependencies
+# Install PM2
+RUN npm install pm2 -g
+
+# Install the application package along with all dependencies
 RUN pip install /tmp/wheels/*.whl && rm -rf /tmp/wheels
 
-# # Copy static and template files
+# Copy static and template files
 COPY ./static /app/static
 COPY ./templates /app/templates
 
 COPY run.py /app/run.py
 
-CMD ["python", "run.py"]
+# Use PM2 to start the application
+CMD ["pm2-runtime", "--interpreter", "python", "run.py"]
