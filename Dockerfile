@@ -1,7 +1,5 @@
-# --- Final Stage ---
-FROM python:3.11-slim as final
-
-ENV BUILD_VERSION=UNKNOWN
+# Use the official Python image
+FROM python:3.11-slim as base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -12,9 +10,11 @@ ENV NUM_WORKERS 4
 VOLUME /app/data
 WORKDIR /app
 
-# Copy wheels and built wheel from the builder stage
-COPY --from=builder /app/dist/*.whl /tmp/wheels/
-COPY --from=builder /tmp/wheels/*.whl /tmp/wheels/
+# Copy static and template files
+COPY ./static /app/static
+COPY ./templates /app/templates
+
+COPY run.py /app/run.py
 
 # Install Node.js and npm
 RUN apt-get update \
@@ -24,14 +24,17 @@ RUN apt-get update \
 # Install PM2
 RUN npm install pm2 -g
 
-# Install the application package along with all dependencies
-RUN pip install /tmp/wheels/*.whl && rm -rf /tmp/wheels
+# Install your Python dependencies
+COPY pyproject.toml poetry.lock* /app/
+RUN pip install poetry \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-dev --no-root --no-interaction --no-ansi
 
-# Copy static and template files
-COPY ./static /app/static
-COPY ./templates /app/templates
+# Copy the rest of your application's code
+COPY annatar /app/annatar
 
-COPY run.py /app/run.py
+# Build your application using Poetry
+RUN poetry build
 
-# Use PM2 to start the application
+# Use PM2 to start your application
 CMD ["pm2-runtime", "--interpreter", "python", "run.py"]
