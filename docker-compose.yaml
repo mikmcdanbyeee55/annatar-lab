@@ -20,7 +20,7 @@ services:
       JACKETT_API_KEY: "xhsfzj61y4r5m6k78jmumk0veumwnqg1"
       JACKETT_MAX_RESULTS: "10"
       JACKETT_TIMEOUT: "5"
-      JACKETT_INDEXERS: "1337x,bitsearch,btarg,eztv,iptorrents,knaben,lat-team-api,moviesdvdr,solidtorrents,therarbg,torlock,torrentdownloads,torrent9,torrentfunk,torrentz2nz,unionfansub,yts"
+      JACKETT_INDEXERS: "1337x,bitsearch,btarg,eztv,knaben,lat-team-api,moviesdvdr,solidtorrents,therarbg,torlock,torrentdownloads,torrent9,torrentfunk,torrentz2nz,unionfansub,yts"
       LISTEN_PORT: "8000"
 
   jackett:
