@@ -1,4 +1,4 @@
-ARG BUILD_VERSION=UNKNOWN
+ARG BUILD_VERSION=1.1.1
 
 # --- Build Stage ---
 FROM python:3.11 as builder
